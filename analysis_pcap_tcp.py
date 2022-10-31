@@ -182,7 +182,6 @@ mss_val = mss(pkt_list)
 tcp_init_pkts = [x for x in pkt_list if (x.syn==1 and x.ack==0)]
 
 
-print("\n1\n ")
 print("Number of flows: ", len(tcp_init_pkts))
 
 flows = []
@@ -192,7 +191,6 @@ for syn_pkt in tcp_init_pkts:
 	flows.append(flow)
 
 
-print("\n2A\n ")
 for x in range(len(flows)):
 	print("\nFlow: ",x + 1)
 	pkts_12 = flows[x].packets[3:5]
