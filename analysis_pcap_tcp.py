@@ -184,3 +184,52 @@ tcp_init_pkts = [x for x in pkt_list if (x.syn==1 and x.ack==0)]
 
 print("\n1\n ")
 print("Number of flows: ", len(tcp_init_pkts))
+
+flows = []
+for syn_pkt in tcp_init_pkts:
+	flow = Flow(syn_pkt)
+	flow.get_packets(pkt_list)
+	flows.append(flow)
+
+
+print("\n2A\n ")
+for x in range(len(flows)):
+	print("\nFlow: ",x + 1)
+	pkts_12 = flows[x].packets[3:5]
+
+	print("Data packets:")
+	[print(pkt) for pkt in pkts_12]
+
+	print("Acknowledgement packets:")
+
+	[print(flows[x].get_resp(pkt)) for pkt in pkts_12]
+
+print("\n\nThroughoutput")
+for x in range(len(flows)):
+	print("\nFlow: ",x + 1)
+	flows[x].throughput = flows[x].get_throughput("128.208.2.198")
+	print("Throughput: ",flows[x].throughput,"Mbps")
+
+
+print("Lost packets: ")
+for x in range(len(flows)):
+	print("\nFlow: ",x + 1)
+	loss_values = flows[x].get_loss_data()
+	print("Lost packets:\t",loss_values[0])
+	print("Total number of packets:\t",loss_values[1])
+
+print("\n\nPart B")
+fig_cwnd_count = 10
+for x in range(len(flows)):
+	print("\nFlow: ",x)
+	flows[x].cwnd_list = flows[x].get_cwnd_list()
+	print("Congestion Window sizes (in bytes):\t",flows[x].cwnd_list[:10])
+	
+
+print("\n\nPart B ")
+for x in range(len(flows)):
+	print("\nFlow: ",x)
+	flows[x].loss_char = flows[x].get_loss_char()
+	print("Retransmission due to triple ACK:\t",flows[x].loss_char[0])
+	print("Retransmission due to timeout:\t\t",flows[x].loss_char[1])
+
